@@ -1,6 +1,6 @@
-# BlazeLayout (kadira:blaze-layout) [![Build Status](https://travis-ci.org/kadirahq/blaze-layout.svg?branch=master)](https://travis-ci.org/kadirahq/blaze-layout)
+# BlazeLayout (illusionfield:blaze-layout) [v2.3.1](https://github.com/illusionfield/blaze-layout/blob/master/CHANGELOG.md#v231) [![Build Status](https://travis-ci.org/illusionfield/blaze-layout.svg?branch=master)](https://travis-ci.org/illusionfield/blaze-layout)
 
-> This project is earlier known as **meteorhacks:flow-layout**. This is an exact copy of FlowLayout but in a different name.
+> This project is a fork of [kadira:blaze-layout](https://github.com/kadirahq/blaze-layout)
 
 ### Blaze Layout Manager for Meteor
 
@@ -15,13 +15,13 @@ This is a layout manager designed for Blaze. This is built to use with FlowRoute
 
 First install BlazeLayout with:
 
-~~~
-meteor add kadira:blaze-layout
-~~~
+```sh
+meteor add illusionfield:blaze-layout
+```
 
 Then create following few templates
 
-~~~html
+```html
 <template name="layout1">
   {{> Template.dynamic template=top}}
   {{> Template.dynamic template=main}}
@@ -38,33 +38,33 @@ Then create following few templates
 <template name="singlePost">
   <h2>This is the singlePost area.</h2>
 </template>
-~~~
+```
 
 Now you can render the layout with:
 
-~~~js
+```js
 BlazeLayout.render('layout1', { top: "header", main: "postList" });
-~~~
+```
 
 Then you will get output like below:
 
-~~~html
+```html
   <h1>This is the header</h1>
   <h2>This is the postList area.</h2>
-~~~
+```
 
 Sometimes later, you can render the layout again:
 
-~~~js
+```js
 BlazeLayout.render('layout1', { top: "header", main: "singlePost" });
-~~~
+```
 
 Since only the `main` is changed, `top` section won't get re-rendered. Here's the HTML you'll get:
 
-~~~html
+```html
   <h1>This is the header</h1>
   <h2>This is the singlePost area.</h2>
-~~~
+```
 
 ### Rendering Multiple Templates
 
@@ -79,8 +79,8 @@ By default, BlazeLayout render layouts into a DOM element with the id `__blaze-r
 
 Add following code inside on the top of one of your client side JS file:
 
-~~~js
+```js
 BlazeLayout.setRoot('body');
-~~~
+```
 
 You can set any CSS selector, DOM Node, or jQuery object as the root.

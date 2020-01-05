@@ -1,18 +1,29 @@
-Tinytest.addAsync("Integration - render to the dom", function(test, done) {
+import { BlazeLayout } from '../lib/layout.js';
+import { TemplateStats, ResetStats } from './init.templates.js';
+
+Tinytest.addAsync("Integration - render to the dom", (test, done) => {
   BlazeLayout.reset();
   BlazeLayout.render('layout1', {aa: 200});
-  Tracker.afterFlush(function() {
+
+  /*
+  Tracker.afterFlush(() => {
     test.isTrue(/200/.test($('#__blaze-root').text()));
     Meteor.setTimeout(done, 0);
   });
+  */
+
+  Meteor.setTimeout(() => {
+    test.isTrue(/200/.test($('#__blaze-root').text()));
+    Meteor.setTimeout(done, 0);
+  }, 100);
 });
 
-Tinytest.addAsync("Integration - do not re-render", function(test, done) {
+Tinytest.addAsync("Integration - do not re-render", (test, done) => {
   BlazeLayout.reset();
   ResetStats('layout1');
   BlazeLayout.render('layout1', {aa: 2000});
 
-  Tracker.afterFlush(function() {
+  Tracker.afterFlush(() => {
     BlazeLayout.render('layout1', {aa: 3000});
     Tracker.afterFlush(checkStatus);
   });
@@ -25,14 +36,14 @@ Tinytest.addAsync("Integration - do not re-render", function(test, done) {
   }
 });
 
-Tinytest.addAsync("Integration - re-render for the new layout", function(test, done) {
+Tinytest.addAsync("Integration - re-render for the new layout", (test, done) => {
   BlazeLayout.reset();
   ResetStats('layout1');
   ResetStats('layout2');
 
   BlazeLayout.render('layout1');
 
-  Tracker.afterFlush(function() {
+  Tracker.afterFlush(() => {
     BlazeLayout.render('layout2', {aa: 899});
     Tracker.afterFlush(checkStatus);
   });
@@ -43,14 +54,14 @@ Tinytest.addAsync("Integration - re-render for the new layout", function(test, d
   }
 });
 
-Tinytest.addAsync("Integration - render the new layout with data", function(test, done) {
+Tinytest.addAsync("Integration - render the new layout with data", (test, done) => {
   BlazeLayout.reset();
   ResetStats('layout1');
   ResetStats('layout2');
 
   BlazeLayout.render('layout1');
 
-  Tracker.afterFlush(function() {
+  Tracker.afterFlush(() => {
     BlazeLayout.render('layout2', {});
     Tracker.afterFlush(checkStatus);
   });
@@ -63,12 +74,12 @@ Tinytest.addAsync("Integration - render the new layout with data", function(test
   }
 });
 
-Tinytest.addAsync("Integration - pick new data", function(test, done) {
+Tinytest.addAsync("Integration - pick new data", (test, done) => {
   BlazeLayout.reset();
 
   BlazeLayout.render('layout3', {aa: 10});
 
-  Tracker.afterFlush(function() {
+  Tracker.afterFlush(() => {
     test.isTrue(/10/.test($('#__blaze-root').text()));
     BlazeLayout.render('layout3', {aa: 30, bb: 20});
     Tracker.afterFlush(checkStatus);
@@ -81,12 +92,12 @@ Tinytest.addAsync("Integration - pick new data", function(test, done) {
   }
 });
 
-Tinytest.addAsync("Integration - when data not exits in the second time", function(test, done) {
+Tinytest.addAsync("Integration - when data not exits in the second time", (test, done) => {
   BlazeLayout.reset();
 
   BlazeLayout.render('layout3', {aa: 30, bb: 100});
 
-  Tracker.afterFlush(function() {
+  Tracker.afterFlush(() => {
     test.isTrue(/100/.test($('#__blaze-root').text()));
     test.isTrue(/30/.test($('#__blaze-root').text()));
     BlazeLayout.render('layout3', {aa: 20});
@@ -100,12 +111,12 @@ Tinytest.addAsync("Integration - when data not exits in the second time", functi
   }
 });
 
-Tinytest.addAsync("Integration - do not re-render vars again", function(test, done) {
+Tinytest.addAsync("Integration - do not re-render vars again", (test, done) => {
   BlazeLayout.reset();
 
   BlazeLayout.render('layout3', {aa: 10, bb: 20});
 
-  Tracker.afterFlush(function() {
+  Tracker.afterFlush(() => {
     test.isTrue(/10/.test($('#__blaze-root').text()));
     test.isTrue(/20/.test($('#__blaze-root').text()));
     $('#__blaze-root').html('');
@@ -119,26 +130,28 @@ Tinytest.addAsync("Integration - do not re-render vars again", function(test, do
   }
 });
 
-Tinytest.addAsync("Integration - render to the dom with no regions", function(test, done) {
+Tinytest.addAsync("Integration - render to the dom with no regions", (test, done) => {
   BlazeLayout.reset();
   BlazeLayout.render('layout1', {aa: 200});
   BlazeLayout.render('layout1');
-  Tracker.afterFlush(function() {
+  Tracker.afterFlush(() => {
     test.isTrue(/aa/.test($('#__blaze-root').text()));
     Meteor.setTimeout(done, 0);
   });
 });
 
-Tinytest.addAsync("Integration - using a different ROOT", function(test, done) {
+Tinytest.addAsync("Integration - using a different ROOT", (test, done) => {
   BlazeLayout.reset();
-  var rootNode = $("<div id='iam-root'></div>");
-  BlazeLayout.setRoot("#iam-root")
+  const rootNode = $('<div id="iam-root"></div>');
   $('body').append(rootNode);
+  BlazeLayout.root = '#iam-root';
 
   BlazeLayout.render('layout1', {aa: 200});
-  Tracker.afterFlush(function() {
+  Tracker.afterFlush(() => {
     test.isTrue(/200/.test($('#iam-root').text()));
-    BlazeLayout.setRoot("#__blaze-root");
+    // @deprecation warning!
+    // BlazeLayout.setRoot("#__blaze-root");
+    BlazeLayout.root = '#__blaze-root';
     Meteor.setTimeout(done, 0);
     rootNode.remove();
   });

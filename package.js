@@ -1,33 +1,42 @@
+'use strict';
+
 Package.describe({
   summary: 'Layout Manager for Blaze (works well with FlowRouter)',
-  version: '2.3.0',
-  git: 'https://github.com/kadirahq/blaze-layout',
-  name: "kadira:blaze-layout"
+  version: '2.3.1',
+  name: 'illusionfield:blaze-layout',
+  git: 'https://github.com/illusionfield/blaze-layout',
 });
 
-Package.onUse(function (api) {
+Package.onUse(api => {
+  api.versionsFrom('1.8.1');
   configure(api);
-  api.export(['BlazeLayout']);
+
+  api.mainModule('lib/layout.js', 'client');
+  api.export('BlazeLayout', 'client');
 });
 
-Package.onTest(function(api) {
+Package.onTest(api => {
   configure(api);
-  api.use('tinytest');
-  api.addFiles('tests/client/init.templates.html', 'client');
-  api.addFiles('tests/client/init.templates.js', 'client');
-  api.addFiles('tests/client/unit.js', 'client');
-  api.addFiles('tests/client/integration.js', 'client');
+
+  api.use([
+    'tinytest',
+    'templating',
+    'tracker',
+    'jquery',
+  ], 'client');
+
+  api.addFiles([
+    'tests/unit.js',
+    'tests/integration.js',
+  ], 'client');
 });
 
 function configure(api) {
-  api.versionsFrom('1.0');
-  api.use('blaze');
-  api.use('templating');
-  api.use('reactive-dict');
-  api.use('underscore');
-  api.use('jquery');
-  api.use('tracker');
-
-  api.addFiles('lib/client/namespace.js', 'client');
-  api.addFiles('lib/client/layout.js', 'client');
+  api.use([
+    'ecmascript',
+    'blaze',
+    'spacebars',
+    'reactive-dict',
+    'underscore',
+  ], 'client');
 }
