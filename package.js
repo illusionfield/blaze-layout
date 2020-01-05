@@ -34,8 +34,7 @@ Package.onTest(api => {
 function configure(api) {
   api.use([
     'ecmascript',
-    'blaze',
-    'spacebars',
+    'blaze@2.3.4',
     'reactive-dict',
     'underscore',
   ], 'client');
