@@ -26,6 +26,7 @@ Package.onTest(api => {
   ], 'client');
 
   api.addFiles([
+    'tests/init.templates.html',
     'tests/unit.js',
     'tests/integration.js',
   ], 'client');
@@ -34,7 +35,7 @@ Package.onTest(api => {
 function configure(api) {
   api.use([
     'ecmascript',
-    'blaze@2.3.4',
+    'blaze',
     'reactive-dict',
     'underscore',
   ], 'client');

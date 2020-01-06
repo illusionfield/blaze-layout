@@ -1,4 +1,4 @@
-import './init.templates.html';
+//import './init.templates.html';
 
 const TemplateStats = {};
 

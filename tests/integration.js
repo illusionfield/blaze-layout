@@ -5,16 +5,11 @@ Tinytest.addAsync("Integration - render to the dom", (test, done) => {
   BlazeLayout.reset();
   BlazeLayout.render('layout1', {aa: 200});
 
-  /*
-  Tracker.afterFlush(() => {
-    test.isTrue(/200/.test($('#__blaze-root').text()));
-    Meteor.setTimeout(done, 0);
-  });
-  */
-
   Meteor.setTimeout(() => {
-    test.isTrue(/200/.test($('#__blaze-root').text()));
-    Meteor.setTimeout(done, 0);
+    Tracker.afterFlush(() => {
+      test.isTrue(/200/.test($('#__blaze-root').text()));
+      Meteor.setTimeout(done, 0);
+    });
   }, 100);
 });
 
@@ -70,6 +65,23 @@ Tinytest.addAsync("Integration - render the new layout with data", (test, done) 
     test.isTrue(/layout2/.test($('#__blaze-root').text()));
     test.equal(TemplateStats.layout1.rendered, 1);
     test.equal(TemplateStats.layout1.destroyed, 1);
+    Meteor.setTimeout(done, 0);
+  }
+});
+
+Tinytest.addAsync("Integration - modify data", (test, done) => {
+  BlazeLayout.reset();
+
+  BlazeLayout.render('layout3', {aa: 10});
+
+  Tracker.afterFlush(() => {
+    test.isTrue(/10/.test($('#__blaze-root').text()));
+    BlazeLayout.render('layout3', {aa: 30});
+    Tracker.afterFlush(checkStatus);
+  });
+
+  function checkStatus() {
+    test.isTrue(/30/.test($('#__blaze-root').text()));
     Meteor.setTimeout(done, 0);
   }
 });

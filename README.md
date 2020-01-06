@@ -80,7 +80,7 @@ By default, BlazeLayout render layouts into a DOM element with the id `__blaze-r
 Add following code inside on the top of one of your client side JS file:
 
 ```js
-BlazeLayout.setRoot('body');
+BlazeLayout.root = 'body';
 ```
 
 You can set any CSS selector, DOM Node, or jQuery object as the root.
